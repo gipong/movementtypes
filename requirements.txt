@@ -1,0 +1,9 @@
+docutils==0.13.1
+GDAL==1.11.5
+matplotlib==2.0.2
+numpy==1.13.1
+pandas==0.20.1
+pytest==3.2.2
+Sphinx==1.6.3
+sphinxcontrib-websupport==1.0.1
+requests==2.14.2
