@@ -2,7 +2,7 @@
 
 import numpy as np
 import pandas as pd
-from osgeo import ogr, osr
+from pyproj import Proj, transform
 import math
 import sskernel
 import requests
@@ -50,15 +50,15 @@ class mvtypes:
         :param inEPSG: default is 4326, the EPSG code identifier of WGS84
         :param outEPSG: default is 3857, the EPSG code identifier of
         """
+
+        # transform(Proj(init='epsg:4326'), Proj(init='epsg:3857'), -0.1285907, 51.50809)
+
         self.data = pd.read_csv(path)
         self.vecList = [0 for i in range(self.data.shape[0])]
         self.threshold = threshold
         self.velocity = 0
-        self.inRef = osr.SpatialReference()
-        self.inRef.ImportFromEPSG(inEPSG)
-        self.outRef = osr.SpatialReference()
-        self.outRef.ImportFromEPSG(outEPSG)
-        self.coordTransform = osr.CoordinateTransformation(self.inRef, self.outRef)
+        self.inRef = Proj(init='epsg:{}'.format(inEPSG))
+        self.outRef = Proj(init='epsg:{}'.format(outEPSG))
         self.cluster = []
         self.cls_number = 1
         self.classifyNum = 5
@@ -133,22 +133,14 @@ class mvtypes:
         :param nexti: index of mvtypes next data
         :return: point of velocity(unit: km/hr)
         """
-        pinit = ogr.Geometry(ogr.wkbPoint)
-        pre_pinit = ogr.Geometry(ogr.wkbPoint)
-        next_pinit = ogr.Geometry(ogr.wkbPoint)
+        pinit = transform(self.inRef, self.outRef, init.lng, init.lat)
+        pre_pinit = transform(self.inRef, self.outRef, pre.lng, pre.lat)
+        next_pinit = transform(self.inRef, self.outRef, nexti.lng, nexti.lat)
 
-        pinit.AddPoint(init.lng, init.lat)
-        pre_pinit.AddPoint(pre.lng, pre.lat)
-        next_pinit.AddPoint(nexti.lng, nexti.lat)
-
-        pinit.Transform(self.coordTransform)
-        pre_pinit.Transform(self.coordTransform)
-        next_pinit.Transform(self.coordTransform)
-
-        vector = [next_pinit.GetPoint()[0] - pinit.GetPoint()[0],
-                  next_pinit.GetPoint()[1] - pinit.GetPoint()[1],
-                  pinit.GetPoint()[0] - pre_pinit.GetPoint()[0],
-                  pinit.GetPoint()[1] - pre_pinit.GetPoint()[1]]
+        vector = [next_pinit[0] - pinit[0],
+                  next_pinit[1] - pinit[1],
+                  pinit[0] - pre_pinit[0],
+                  pinit[1] - pre_pinit[1]]
         perhour = pd.Timedelta(pd.to_datetime(nexti.time) - pd.to_datetime(pre.time)) / \
                   pd.Timedelta('1 hours')
         vector_length = math.hypot(vector[0], vector[1]) + math.hypot(vector[2], vector[3])
