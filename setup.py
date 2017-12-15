@@ -18,7 +18,8 @@ requirements = [
 
 setup(
     name='movementtypes',
-    version='0.1.0',
+    version='0.1.1',
+    description='extract GPS traces from file and analyze them to reveal movement types',
     entry_points='''
         [console_scripts]
         mvtypes=movementtypes.cli:main
