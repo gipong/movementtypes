@@ -7,6 +7,7 @@ Install
 movementtypes is available on pypi, https://pypi.python.org/pypi/movementtypes/0.1.1
 
 .. code-block:: bash
+
     $ pip install movementtypes
 
 Documentation
@@ -32,6 +33,7 @@ Columns in the CSV file
 * time: this value can be YYYY-MM-DD hh:mm:ss or ISO 8601 date and time format
 
 .. code-block:: python
+
     import movementtypes as mvt
 
     df = mvt.mvtypes("data/gps-trajectory.csv")
@@ -53,6 +55,7 @@ Public GPS traces on OSM https://www.openstreetmap.org/traces
 (gpx2csv can convert the GPX file to valid CSV files)
 
 .. code-block:: python
+
     # path can be your file path or public gpx link
     mvt.convert.gpx2csv("https://www.openstreetmap.org/trace/2550408/data", 'osmdata')
 
@@ -64,6 +67,7 @@ Public GPS traces on OSM https://www.openstreetmap.org/traces
 Command line usage
 ------------------
 .. code-block:: bash
+
     $ mvtypes --help
     Usage: mvtypes [OPTIONS] PATH OUTPUT
 
