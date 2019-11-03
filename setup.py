@@ -13,7 +13,7 @@ requirements = [
     'numpy==1.13.1',
     'pandas==0.20.1',
     'Click>=6.0',
-    'requests==2.14.2',
+    'requests==2.20.0',
 ]
 
 setup(
