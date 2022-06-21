@@ -10,7 +10,7 @@ def readme():
 requirements = [
     'pyproj==1.9.5.1',
     'matplotlib==2.0.2',
-    'numpy==1.13.1',
+    'numpy==1.22.0',
     'pandas==0.20.1',
     'Click>=6.0',
     'requests==2.14.2',
